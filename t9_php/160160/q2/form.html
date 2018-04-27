@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Lets Build Stuff!</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+</head>
+<body>
+
+<div class="container">
+
+  <h2>Lets Build Stuff!! <a href="login.html" class="btn btn-default"> See All Registrations</a> </h2>
+  <p><i>An Exicting Event Hosted by Students of CS251. Resigter Here Now!</i></p>
+  <form method="post" action="reg.php" id="reg">
+    <div class="form-group">
+      <label for="usr">Name:</label>
+      <input type="text" class="form-control" id="usr" name="usr"  required>
+      <small id="usr_e" class="text-danger"> </small>
+    </div>
+    <div class="form-group">
+      <label for="addr">Address:</label>
+      <input type="text" class="form-control" id="addr" name="addr" required>
+      <small id="addr_e" class="text-danger"> </small>
+    </div>
+    <div class="form-group">
+      <label for="mail">Email:</label>
+      <input type="text" class="form-control" id="mail" name="mail" required>
+      <small id="mail_e" class="text-danger"> </small>
+    </div>
+    <div class="form-group">
+      <label for="mob">Mobile-Number:</label>
+      <input type="text" class="form-control" id="mob" name="mob" required>
+      <small id="mob_e" class="text-danger"> </small>
+    </div>
+    <div class="form-group">
+      <label for="acct">Bank-Account:</label>
+      <input type="number" class="form-control" id="acct" name="acct" required>
+	  <small id="acct_e" class="text-danger"> </small>
+    </div>
+    <div class="form-group">
+      <label for="pwd">Bank-Password:</label>
+	  <input type="password" class="form-control is-invalid" id="pwd" name="pwd" required>
+      <small id="pwd_e" class="text-danger"> </small>
+    </div>
+    <button type="submit" class="btn btn-primary">Register</button>
+
+  </form>
+</div>
+<script src="validate.js"></script>
+</body>
+</html>

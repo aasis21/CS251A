@@ -1,0 +1,28 @@
+#!/bin/bash
+
+total_strings=0
+total_comments=0
+
+SAVEIFS=$IFS
+IFS=$(echo -en "\n\b")
+
+no_of_c_files=`find "$1" -name "*.c"| wc -l`
+
+line_counter=0;
+
+find "$1" -name '*.c' | while read l; do
+
+    line_counter=$((line_counter+1))
+    echo_file=`awk -f $2 $l`
+
+    strings=`echo $echo_file| cut -d" " -f1`
+    comments=`echo $echo_file| cut -d" " -f2`
+
+    total_strings=$((total_strings+strings))
+    total_comments=$((total_comments+comments))
+
+    if [ $line_counter -eq $no_of_c_files ]
+    then
+        printf "Total Strings = $total_strings\nTotal Comments = $total_comments\n"
+    fi
+done

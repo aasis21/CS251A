@@ -1,0 +1,34 @@
+Instructions
+
+There are four test case folders t1, t2, t3 and t4.
+
+Copy the student's code (q2.c) to this folder (q2) and ask the student to compile the code.
+The output file should be 'q2'.
+$  gcc q2.c -lpthread -o q2
+
+
+Run the following script to generate the outputs for four different test cases.
+The script uses the binary with hardcoded name (q2), so it is necessary that 
+the output from previous step be of the same name.
+$ ./tools/generate_output.sh
+
+This will generate outputs from the student's binary and place them in the test case folders
+and for each test case with multiple number of threads (1, 2, 4, 8 and 16). You can check any of them.
+
+
+[Optional] You can make use of a compare tool present in the tools folder. Since, test cases
+2, 3 and 4 use only 100 accounts, use "--limited" option in the end for the same.
+
+$ ./compare.sh t1/acc_out.txt t1/acc_out_student_8.txt
+or
+$ ./compare.sh t2/acc_out.txt t2/acc_out_student_4.txt --limited
+or
+$ ./compare.sh t4/acc_out.txt t4/acc_out_student_16.txt --limited
+
+
+
+To delete the generated files (once the evaluation is done), you can run the following command :-
+
+$ ./generate_output.sh --clean
+
+

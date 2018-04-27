@@ -1,0 +1,83 @@
+#!/bin/bash
+
+print_result(){
+
+  n=$1
+  len=${#n}
+
+  if [ $len -gt 7 ]; then
+    first=$(print_result ${n:0:len-7})
+    second=$(echo ${n:len-7:7} | sed 's/^0*//')
+    second=$(print_result $second)
+    echo $first crore $second
+
+  elif [ $len -gt 5 ]; then
+    first_1=$(print_result ${n:0:len-5})
+    second_1=$(echo ${n:len-5:5} | sed 's/^0*//')
+    second_1=$(print_result $second_1)
+    echo $first_1 lakh $second_1
+
+  elif [ $len -gt 3 ]; then
+    first_2=$(print_result ${n:0:len-3})
+    second_2=$(echo ${n:len-3:3} | sed 's/^0*//')
+    second_2=$(print_result $second_2)
+    echo $first_2 thousand $second_2
+
+  elif [ $len -gt 2 ]; then
+    first_3=$(print_result ${n:0:len-2})
+    second_3=$(echo ${n:len-2:2} | sed 's/^0*//')
+    second_3=$(print_result $second_3)
+    echo $first_3 hundred $second_3
+
+  else
+    case $n in
+        1) echo one;;
+        2) echo two;;
+        3) echo three;;
+        4) echo four;;
+        5) echo five;;
+        6) echo six;;
+        7) echo seven;;
+        8) echo eight;;
+        9) echo nine;;
+        10) echo ten;;
+        11) echo eleven;;
+        12) echo twelve;;
+        13) echo thirteen;;
+        14) echo fourteen;;
+        15) echo fifteen;;
+        16) echo sixteen;;
+        17) echo seventeen;;
+        18) echo eighteen;;
+        19) echo nineteen;;
+        20) echo twenty;;
+        30) echo thirty;;
+        40) echo forty;;
+        50) echo fifty;;
+        60) echo sixty;;
+        70) echo seventy;;
+        80) echo eighty;;
+        90) echo ninety;;
+        *) if [ $len -eq 0 ]; then
+              echo
+           else
+             first_4=$(print_result $(( ${n:0:len-1} * 10 )))
+             second_4=$(echo ${n:len-1:1} | sed 's/^0*//')
+             second_4=$(print_result $second_4)
+             echo $first_4 $second_4
+           fi
+    esac
+  fi
+
+}
+
+n=$1
+regex='^[0-9]{1,11}$'
+
+if [ $n -eq 0 ]; then
+  echo zero
+elif ! [[ $n =~ $regex ]]; then
+  echo Invalid Input, The input must be an integer between 0 and 99999999999
+else
+  print_result $n
+fi

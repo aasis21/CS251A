@@ -1,0 +1,85 @@
+#!/usr/bin/gawk
+BEGIN{
+
+}
+
+{
+    no_of_bytes[$3"+"substr($5, 1, length($5)-1)] += $NF
+
+    no_of_packets[$3"+"substr($5, 1, length($5)-1)] += 1
+
+    if($NF != "0") {
+        no_of_data_packets[$3"+"substr($5, 1, length($5)-1)] += 1
+    }
+    else {
+        no_of_data_packets[$3"+"substr($5, 1, length($5)-1)] += 0
+    }
+
+    if(flag[$3"+"substr($5, 1, length($5)-1)] != 1){
+        starting_time[$3"+"substr($5, 1, length($5)-1)] = $1
+    }
+
+    final_time[$3"+"substr($5, 1, length($5)-1)] = $1
+    flag[$3"+"substr($5, 1, length($5)-1)] = 1
+
+    if($8 == "seq") {
+        split($9, sequence, ":")
+        if(sequence[1]<=last_seq_r[$3"+"substr($5, 1, length($5)-1)] && sequence[2]>=last_seq_r[$3"+"substr($5, 1, length($5)-1)]){
+            retransmits[$3"+"substr($5, 1, length($5)-1)] = retransmits[$3"+"substr($5, 1, length($5)-1)] + last_seq_r[$3"+"substr($5, 1, length($5)-1)] - sequence[1]
+        }
+        last_seq_r[$3"+"substr($5, 1, length($5)-1)] = sequence[2]
+
+        if(sequence[1]<=last_seq_l[$3"+"substr($5, 1, length($5)-1)] && sequence[2]>=last_seq_l[$3"+"substr($5, 1, length($5)-1)]){
+            retransmits[$3"+"substr($5, 1, length($5)-1)] = retransmits[$3"+"substr($5, 1, length($5)-1)] - last_seq_l[$3"+"substr($5, 1, length($5)-1)] + sequence[2]
+        }
+        last_seq_l[$3"+"substr($5, 1, length($5)-1)] = sequence[1]
+    }
+}
+
+END{
+
+    for(i in final_time) {
+        if(flag2[i] != 1){
+            split(i, ip, "+")
+
+            split(ip[1], ip1, ".")
+            ip1_with_colon = ip1[1]"."ip1[2]"."ip1[3]"."ip1[4]":"ip1[5]
+
+            split(ip[2], ip2, ".")
+            ip2_with_colon = ip2[1]"."ip2[2]"."ip2[3]"."ip2[4]":"ip2[5]
+
+            printf "Connection (A=%s B=%s)\n",ip1_with_colon,ip2_with_colon
+            k=ip[1]"+"ip[2]
+
+            split(final_time[k], f, ":")
+            final = f[1]*3600 + f[2]*60 + f[3]
+
+            split(starting_time[k], s, ":")
+            initial = s[1]*3600 + s[2]*60 + s[3]
+
+            total_time = final - initial
+
+            throughput = int(no_of_bytes[k]/total_time)
+
+            printf "A-->B #packets=%d, #datapackets=%d, #bytes=%s, #retrans=%d xput=%d bytes/sec\n",no_of_packets[k],no_of_data_packets[k],no_of_bytes[k],restransmits[k],throughput
+
+
+            l=ip[2]"+"ip[1]
+
+            split(final_time[l], f, ":")
+            final = f[1]*3600 + f[2]*60 + f[3]
+
+            split(starting_time[l], s, ":")
+            initial = s[1]*3600 + s[2]*60 + s[3]
+
+            total_time = final - initial
+
+            throughput = int(no_of_bytes[l]/total_time)
+
+            printf "B-->A #packets=%d, #datapackets=%d, #bytes=%s, #retrans=%d xput=%d bytes/sec\n",no_of_packets[l],no_of_data_packets[l],no_of_bytes[l],retransmits[l],throughput
+
+            flag2[l]=1;
+        }
+    }
+
+}

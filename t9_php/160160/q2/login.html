@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Lets Build Stuff!</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+</head>
+<body>
+
+<div class="container">
+  <h2>Lets Build Stuff!! - Admin Portal <a href="form.html" class="btn btn-default"> Another Registrations</a> </h2>
+  <p><i>An Exicting Event Hosted by Students of CS251.</i></p>
+  <form method="post" action="admin.php" id="reg">
+    <div class="form-group">
+      <label for="usr">Username:</label>
+      <input type="text" class="form-control" id="usr" name="usr"  required>
+      <small id="usr_e" class="text-danger"> </small>
+    </div>
+    <div class="form-group">
+      <label for="pwd">Password:</label>
+	  <input type="password" class="form-control is-invalid" id="pwd" name="pwd" required>
+      <small id="pwd_e" class="text-danger"></small>
+    </div>
+    <button type="submit" class="btn btn-primary">Submit</button>
+  </form>
+</div>
+</body>
+</html>

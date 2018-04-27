@@ -1,0 +1,81 @@
+#!/bin/bash
+
+for_integers(){
+  address_of_file=$1
+
+  print=`cat "$address_of_file" | tr ' ' '\n'`
+  arr=$(echo $print)
+
+  local count=0
+
+  for j in $arr
+  do
+    if [[ $j =~ ^[+-]?[0-9]+$ ]]
+    then
+      count=$(($count+1))
+    elif [[ $j =~ ^[0-9][\.\?!] ]]; then
+      count=$(($count+1))
+      if [[ $j =~ ^[0-9][\.\?!][0-9] ]]; then
+        count=$(($count-1))
+      fi
+    fi
+  done
+
+  local int_1=$2
+  eval $int_1="'$count'"
+
+}
+
+for_sentences(){
+  address_of_the_file=$1
+
+  local favourable=`cat "$address_of_the_file" | grep -o '[\.\?!]' | wc -l`
+  local unfavourable=`cat $address_of_the_file | grep -o '\.[0-9]' | wc -l`
+  local total=$(($favourable-$unfavourable))
+
+  local final=$2
+  eval $final="'$total'"
+}
+
+get_answer(){
+
+  local path=$1
+  local indent=$2
+  local lines=$3
+  local int=$4
+
+  if [ -f "$path" ]; then
+
+    for_sentences $path a
+    eval $lines="'$a'"
+
+
+    for_integers $path b
+
+    eval $int="'$b'"
+    echo "$indent""(F) "${path##*/}-$a-$b
+    return 0
+
+  else
+    local d_lines=0
+    local d_integers=0
+    if [ -z "$(ls -A "$path")" ]; then
+      echo "$indent""(D) "${path##*/}-0-0
+    else
+      for i in "$path"/*
+      do
+        get_answer "$i" "$indent    " dir_a dir_b
+        d_lines=$(( $d_lines + $dir_a ))
+        d_integers=$(( d_integers + dir_b ))
+      done
+      echo "$indent""(D) "${path##*/}-$d_lines-$d_integers
+    fi
+
+    eval $int="'$d_integers'"
+    eval $lines="'$d_lines'"
+
+    return 0
+  fi
+}
+
+get_answer "$PWD" "    " ans_1 ans_2
